@@ -1,0 +1,8 @@
+
+fastapi
+uvicorn
+requests
+gtts
+python-dotenv
+streamlit
+python-multipart
