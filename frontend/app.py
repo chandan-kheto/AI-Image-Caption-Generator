@@ -1,89 +1,109 @@
-
-
 # ==============================================================
 # 📁 frontend/app.py
 # Streamlit Frontend for AI Image Caption + Voice Generator
 # ==============================================================
 
-# Streamlit UI framework
 import streamlit as st
-
-# To send image → backend
-import requests
-
-# For extracting filename from paths
-import os
+import requests, os
 
 
 # --------------------------------------------------------------
 # 🌐 Backend API Base URL
 # --------------------------------------------------------------
-API_URL = "http://127.0.0.1:8000"   # FastAPI backend running locally
+API_URL = "http://127.0.0.1:8000"
 
 
 # --------------------------------------------------------------
-# 🎨 Streamlit Page Setup
+# 🎨 Page Config
 # --------------------------------------------------------------
 st.set_page_config(
     page_title="AI Image Caption + Voice",
-    page_icon="🎤",
     layout="centered"
 )
 
-st.title("🖼️🎤 AI Image Caption + Voice Generator (Free Version)")
+st.title("🖼️🎤 AI Image Caption + Voice Generator (free version)")
 st.write("Upload an image — the AI will describe it and speak the caption aloud!")
 
 
 # --------------------------------------------------------------
-# 📸 Image Upload Component
+# 🧠 Session State Setup
+# --------------------------------------------------------------
+if "uploaded_file" not in st.session_state:
+    st.session_state.uploaded_file = None
+
+
+# --------------------------------------------------------------
+# 📸 File Uploader
 # --------------------------------------------------------------
 uploaded = st.file_uploader(
     "📸 Upload an image",
-    type=["jpg", "jpeg", "png", "webp"]
+    type=["jpg", "jpeg", "png", "webp"],
+    key="file_uploader"
 )
 
-# Preview uploaded image
+# Save uploaded file to session state
 if uploaded:
-    st.image(uploaded, caption="Uploaded Image", width="stretch")
+    st.session_state.uploaded_file = uploaded
 
 
 # --------------------------------------------------------------
-# ✨ Main Button → Generate Caption + Voice
+# 🖼 Image Preview
 # --------------------------------------------------------------
-if uploaded and st.button("✨ Generate Caption + Voice"):
+if st.session_state.uploaded_file:
+    st.image(st.session_state.uploaded_file,
+             caption="Uploaded Image",
+             use_container_width=True)
 
-    # Convert uploaded file for FastAPI
+
+# --------------------------------------------------------------
+# ✨ Buttons (ALWAYS VISIBLE)
+# --------------------------------------------------------------
+col1, col2 = st.columns(2)
+
+with col1:
+    generate = st.button(
+        "✨ Generate Caption + Voice",
+        disabled=st.session_state.uploaded_file is None
+    )
+
+with col2:
+    clear = st.button("🧹Clear chat")
+
+
+# --------------------------------------------------------------
+# 🗑 Clear Logic
+# --------------------------------------------------------------
+if clear:
+    st.session_state.uploaded_file = None
+    st.session_state.file_uploader = None
+    st.rerun()
+
+
+# --------------------------------------------------------------
+# ✨ Generate Logic
+# --------------------------------------------------------------
+if generate and st.session_state.uploaded_file:
+
+    file = st.session_state.uploaded_file
+
     files = {
-        "file": (uploaded.name, uploaded.getvalue(), uploaded.type)
+        "file": (file.name, file.getvalue(), file.type)
     }
 
-    # Show loading spinner
     with st.spinner("Generating caption and voice... ⏳"):
-        # Send POST request → backend
         resp = requests.post(f"{API_URL}/caption/online", files=files)
 
-    # ----------------------------------------------------------
-    # ✅ Success response (200 OK)
-    # ----------------------------------------------------------
     if resp.status_code == 200:
         data = resp.json()
 
-        # Show caption text
         st.success("✅ Caption Generated:")
         st.write(data["caption"])
 
-        # ------------------------------------------------------
-        # 🔊 Audio playback section
-        # ------------------------------------------------------
-        audio_path = data["voice_path"]           # ex: backend/temp/1234.mp3
+        audio_path = data["voice_path"]
         audio_filename = os.path.basename(audio_path)
         audio_url = f"{API_URL}/audio/{audio_filename}"
 
-        # Streamlit audio player
         st.audio(audio_url)
 
-    # ----------------------------------------------------------
-    # ❌ Error handling
-    # ----------------------------------------------------------
     else:
         st.error("❌ Something went wrong. Please try again.")
