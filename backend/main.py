@@ -10,7 +10,7 @@ load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
-from backend.caption_gen_openrouter import caption_image_online
+from backend.caption_generator import caption_image_online
 from backend.tts_voice import generate_voice
 import os, uuid
 
@@ -52,3 +52,4 @@ async def get_audio(filename: str):
     if os.path.exists(path):
         return FileResponse(path, media_type="audio/mpeg", filename=filename)
     return {"error": "File not found"}
+
