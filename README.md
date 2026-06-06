@@ -33,7 +33,9 @@ Image Captioning	GPT-4o-mini (OpenRouter)
 Voice Output	gTTS (Google TTS)
 Environment	Python + dotenv
 Communication	REST API (JSON)
+
 🏗️ Project Structure
+```
 AI-Image-Caption-Voice-Generator/
 │
 ├── backend/
@@ -48,6 +50,7 @@ AI-Image-Caption-Voice-Generator/
 │
 ├── .env                          # API keys (ignored in Git)
 └── requirements.txt
+```
 
 ⚙️ Setup Instructions
 1️⃣ Clone the Repository
@@ -55,16 +58,13 @@ git clone https://github.com/YOUR_USERNAME/ai-image-caption-voice-generator.git
 cd ai-image-caption-voice-generator
 
 2️⃣ Create a Virtual Environment
-Windows:
-python -m venv venv
+Windows:  python -m venv venv
 venv\Scripts\activate
 
-Mac / Linux:
-python3 -m venv venv
+Mac / Linux: python3 -m venv venv
 source venv/bin/activate
 
-3️⃣ Install Dependencies
-pip install -r requirements.txt
+3️⃣ Install Dependencies: pip install -r requirements.txt
 
 4️⃣ Add Your .env File
 
@@ -80,9 +80,7 @@ MODEL=openai/gpt-4o-mini
 uvicorn backend.main:app --reload
 
 
-Then visit:
-
-👉 http://127.0.0.1:8000/docs
+Then visit: 👉 http://127.0.0.1:8000/docs
 
 (API testing with Swagger UI)
 
@@ -90,10 +88,7 @@ Then visit:
 cd frontend
 streamlit run app.py
 
-
-Your UI opens at:
-
-👉 http://localhost:8501
+Your UI opens at:  👉 http://localhost:8501
 
 🧩 Example Outputs
 Image Input	AI Caption	Voice Output
