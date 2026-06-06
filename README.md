@@ -18,7 +18,6 @@ AI Image Caption + Voice Generator is a lightweight, free, and open-source AI ap
 
 🎯 Features
 ```
-
 ✅ Upload any image (JPG, PNG, WEBP)
 ✅ AI generates a meaningful one-line caption
 ✅ gTTS converts caption into a downloadable MP3 file
