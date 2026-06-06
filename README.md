@@ -17,6 +17,7 @@ AI Image Caption + Voice Generator is a lightweight, free, and open-source AI ap
 💰 Uses only free APIs, no paid credits required
 
 🎯 Features
+```
 
 ✅ Upload any image (JPG, PNG, WEBP)
 ✅ AI generates a meaningful one-line caption
@@ -24,6 +25,7 @@ AI Image Caption + Voice Generator is a lightweight, free, and open-source AI ap
 ✅ Clean & modern Streamlit UI
 ✅ FastAPI backend with REST API
 ✅ No GPU required — works on any laptop
+```
 
 🧠 Tech Stack
 Layer	Technology
